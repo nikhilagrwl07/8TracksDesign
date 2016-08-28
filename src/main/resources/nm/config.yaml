@@ -1,0 +1,76 @@
+excaliburMaster:
+  # the name of your JDBC driver
+  driverClass: com.mysql.jdbc.Driver
+  # the username
+  user: root
+  # the password
+  password:
+  # the JDBC URL
+  url: jdbc:mysql://localhost/suggestApp
+  # any properties specific to your JDBC driver:
+  properties:
+   charSet: UTF-8
+   hibernate.show_sql: false
+   hibernate.hbm2ddl.auto: validate
+   hibernate.session.events.log: false
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyApplication Health Check */ SELECT 1"
+  # the minimum number of connections to keep open
+  minSize: 8
+
+  # the maximum number of connections to keep open
+  maxSize: 256
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: false
+  checkConnectionOnBorrow: true
+  maxConnectionAge : 10s
+
+logging:
+  level: INFO
+  appenders:
+    - type: file
+      currentLogFilename: /var/log/flipkart/erp/fk-crm-spartans-dashboard/app.log
+      threshold: ALL
+      archive: true
+      archivedFileCount: 3
+      logFormat: "%date %level [%thread] %logger{10} [%X{id}] %msg%n\n"
+      archivedLogFilenamePattern: /var/log/flipkart/erp/fk-crm-spartans-dashboard/app-%d{yyyy-MM-dd}.log
+      timeZone: IST
+    - type: console
+
+server:
+  applicationConnectors:
+  - type: http
+    port: 8024
+    idleTimeout: 30 seconds
+    useServerHeader: true
+    useDateHeader: true
+    inputBufferSize: 64KiB
+    maxRequestHeaderSize: 64KiB
+    acceptorThreads: 4
+    selectorThreads: 8
+
+
+  adminConnectors:
+  - type: http
+    port: 8025
+    idleTimeout: 30 seconds
+    acceptorThreads: 1
+    selectorThreads: 2
+    useServerHeader: true
+    useDateHeader: true
+
+
+  requestLog:
+      timeZone: IST
+      enabled: true
+      appenders:
+        - type: file
+          currentLogFilename: /var/log/flipkart/erp/fk-crm-spartans-dashboard/request.log
+          archivedLogFilenamePattern: /var/log/flipkart/erp/fk-crm-spartans-dashboard/request-%d.log
+          timeZone: IST
+          archivedFileCount: 3
+          logFormat: "%date %level %logger{10} [%X{id}] %msg%n"
